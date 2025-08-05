@@ -1,0 +1,120 @@
+[gd_scene load_steps=6 format=3 uid="uid://ohlp7gr74wvg"]
+
+[ext_resource type="Script" uid="uid://cgj4ou7d7yy7" path="res://node_2d.gd" id="1_gxo8o"]
+[ext_resource type="PackedScene" uid="uid://bhqmb13vlqegd" path="res://Test Buddy.tscn" id="2_24d08"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24d08"]
+bg_color = Color(0.315018, 0.604274, 0.708246, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_24d08"]
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_170dk"]
+font_color = Color(0.808998, 0.808998, 0.808998, 1)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_gxo8o")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -1
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 24.0
+offset_bottom = 24.0
+scale = Vector2(29.04, 16.28)
+color = Color(0.784314, 0.784314, 0.784314, 1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-17, -15)
+anchor_mode = 0
+
+[node name="Sprite2D" parent="." instance=ExtResource("2_24d08")]
+position = Vector2(1064, 560)
+scale = Vector2(0.953125, 0.933594)
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 712.0
+offset_top = 8.0
+offset_right = 1072.0
+offset_bottom = 496.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_24d08")
+
+[node name="Grid Size" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 32.0
+offset_right = 155.0
+offset_bottom = 72.0
+text = "Grid Size:"
+label_settings = SubResource("LabelSettings_24d08")
+
+[node name="gridNum Input" type="LineEdit" parent="Panel/Grid Size"]
+layout_mode = 0
+offset_left = 128.0
+offset_right = 196.562
+offset_bottom = 31.0
+text = "3"
+placeholder_text = "3"
+max_length = 3
+clear_button_enabled = true
+select_all_on_focus = true
+
+[node name="MAX_ 150" type="Label" parent="Panel/Grid Size"]
+layout_mode = 0
+offset_left = 217.0
+offset_top = 2.0
+offset_right = 339.0
+offset_bottom = 42.0
+text = "(MAX: 150)"
+label_settings = SubResource("LabelSettings_170dk")
+
+[node name="Lines" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 96.0
+offset_right = 155.0
+offset_bottom = 136.0
+text = "Lines:"
+label_settings = SubResource("LabelSettings_24d08")
+
+[node name="displayLinesCheck" type="CheckBox" parent="Panel/Lines"]
+layout_mode = 0
+offset_left = 67.0
+offset_top = -2.0
+offset_right = 91.0
+offset_bottom = 22.0
+scale = Vector2(1.68, 1.64)
+button_pressed = true
+
+[node name="Fill Cells" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 160.0
+offset_right = 155.0
+offset_bottom = 200.0
+text = "Fill Cells:"
+label_settings = SubResource("LabelSettings_24d08")
+
+[node name="fillCellsCheck" type="CheckBox" parent="Panel/Fill Cells"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = -2.0
+offset_right = 124.0
+offset_bottom = 22.0
+scale = Vector2(1.68, 1.64)
+button_pressed = true
+
+[node name="Generate Button" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 416.0
+offset_right = 288.0
+offset_bottom = 466.0
+theme_override_font_sizes/font_size = 30
+text = "Generate"
+
+[connection signal="editing_toggled" from="Panel/Grid Size/gridNum Input" to="." method="_on_grid_num_input_editing_toggled"]
+[connection signal="text_changed" from="Panel/Grid Size/gridNum Input" to="." method="_on_grid_num_input_text_changed"]
+[connection signal="toggled" from="Panel/Lines/displayLinesCheck" to="." method="_on_display_lines_check_toggled"]
+[connection signal="toggled" from="Panel/Fill Cells/fillCellsCheck" to="." method="_on_fill_cells_check_toggled"]
+[connection signal="pressed" from="Panel/Generate Button" to="." method="_on_generate_button_pressed"]
