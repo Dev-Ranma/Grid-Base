@@ -114,6 +114,7 @@ theme_override_font_sizes/font_size = 30
 text = "Generate"
 
 [node name="Autorun" type="Label" parent="Panel"]
+layout_mode = 0
 offset_left = 48.0
 offset_top = 216.0
 offset_right = 155.0
@@ -129,9 +130,19 @@ offset_right = 132.0
 offset_bottom = 22.0
 scale = Vector2(1.68, 1.64)
 
+[node name="MenuBar" type="MenuBar" parent="Panel"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 256.0
+offset_right = 88.0
+offset_bottom = 296.0
+
+[node name="Timer" type="Timer" parent="."]
+
 [connection signal="editing_toggled" from="Panel/Grid Size/gridNum Input" to="." method="_on_grid_num_input_editing_toggled"]
 [connection signal="text_changed" from="Panel/Grid Size/gridNum Input" to="." method="_on_grid_num_input_text_changed"]
 [connection signal="toggled" from="Panel/Lines/displayLinesCheck" to="." method="_on_display_lines_check_toggled"]
 [connection signal="toggled" from="Panel/Fill Cells/fillCellsCheck" to="." method="_on_fill_cells_check_toggled"]
 [connection signal="pressed" from="Panel/Generate Button" to="." method="_on_generate_button_pressed"]
 [connection signal="toggled" from="Panel/Autorun/autorun Check" to="." method="_on_autorun_check_toggled"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
