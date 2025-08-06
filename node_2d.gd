@@ -3,12 +3,15 @@ extends Node2D
 var cellCoordsX : Array = [1]
 var cellCoordsY : Array = [1]
 var cellCoordsBool : PackedByteArray = []
-var cellCoordsTrue = {}
+var cellCoordsTrue : PackedVector2Array = []
 var GridX : float = 600.0
 var GridY : float = 600.0
 var cellNum : int = 3 #150 is hard limit for number of grid lines
 var areLinesActive : bool = true
 var areCellsFilled : bool = true
+var autorunPre : bool
+var autorunPost : bool
+
 
 func _ready() -> void:
 	_grid_points()
@@ -16,8 +19,8 @@ func _ready() -> void:
 	_draw()
 
 func _process(delta: float) -> void:
-	pass
-	
+	if autorunPost == true:
+		_ret_to_go()
 
 func _draw() -> void:
 	var cellWidth : float = GridX / cellNum
@@ -31,6 +34,7 @@ func _draw() -> void:
 	
 	while i < (cellNum * cellNum):
 		if cellCoordsBool[i] == 1:
+			pass
 			#print(((float(cellCoordsTrue[i].x) / float(cellNum)) * 600 ), ", ", ((float(cellCoordsTrue[i].y) / float(cellNum)) * 600))
 			draw_rect(Rect2((((cellCoordsTrue[i].x - 1.0) / float(cellNum)) * 600 ), (((cellCoordsTrue[i].y - 1.0)/ float(cellNum)) * 600 ), cellWidth, cellHeight), Color.BLACK, true)
 		i += 1
@@ -54,33 +58,38 @@ func _grid_points():
 		i += 1
 		cellCoordsX.append(i)
 		cellCoordsY.append(i)
+	cellCoordsTrue.resize((cellNum * cellNum))
 	cellCoordsBool.resize((cellNum * cellNum))
 	cellCoordsBool.fill(0)
-	#print("(", cellCoordsX, ", ", cellCoordsY, ")")
-	#print(cellCoordsBool)
 
 func _cell_fill_in():
 	var randCellsX : PackedInt32Array = []
 	var randCellsY : PackedInt32Array = []
 	var i : int = 0
 	var currentRand : int
-	var numOfFills : int = (cellNum * cellNum) * .75#randi_range((cellNum), (cellNum * 2.5))
+	var numOfFills : int = (cellNum * cellNum) * .75
 	
-	while  i < numOfFills:
-		randCellsX.append(randf_range(1, (cellNum + 1)))
-		randCellsY.append(randf_range(1, (cellNum + 1)))
-		currentRand = clamp((randCellsX[i] * randCellsY[i]), 0, ((cellNum * cellNum) -1))
-		cellCoordsBool[currentRand] = 1
-		cellCoordsTrue.set(currentRand, Vector2(randCellsX[i], randCellsY[i]))
+	while i < numOfFills:
 		i += 1
-	#print(cellCoordsBool)
-	#print(cellCoordsTrue)
+		currentRand = randi_range(0, ((cellNum * cellNum) - 1))
+		cellCoordsBool[currentRand] = true
+		cellCoordsTrue[currentRand] = Vector2(randi_range(1, cellNum), randi_range(1, cellNum))
 
-func _on_generate_button_pressed() -> void:
+func _ret_to_go():
 	_grid_points()
 	if areCellsFilled == true:
 		_cell_fill_in()
 	queue_redraw()
+
+func _on_generate_button_pressed() -> void:
+	pass
+	_ret_to_go()
+	if autorunPre == true:
+		autorunPost = true
+		#print(autorunPost)
+	else:
+		autorunPost = false
+		#print(autorunPost)
 
 func _on_grid_num_input_text_changed(new_text: String) -> void:
 	cellNum = clampi(int(new_text), 2, 150)
@@ -91,3 +100,7 @@ func _on_display_lines_check_toggled(toggled_on: bool) -> void:
 
 func _on_fill_cells_check_toggled(toggled_on: bool) -> void:
 	areCellsFilled = toggled_on
+
+func _on_autorun_check_toggled(toggled_on: bool) -> void:
+	autorunPre = toggled_on
+	#print(autorunPre)
