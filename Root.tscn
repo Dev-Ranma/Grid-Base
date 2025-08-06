@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ohlp7gr74wvg"]
+[gd_scene load_steps=7 format=3 uid="uid://ohlp7gr74wvg"]
 
 [ext_resource type="Script" uid="uid://cgj4ou7d7yy7" path="res://node_2d.gd" id="1_gxo8o"]
 [ext_resource type="PackedScene" uid="uid://bhqmb13vlqegd" path="res://Test Buddy.tscn" id="2_24d08"]
@@ -11,6 +11,8 @@ font_size = 24
 
 [sub_resource type="LabelSettings" id="LabelSettings_170dk"]
 font_color = Color(0.808998, 0.808998, 0.808998, 1)
+
+[sub_resource type="Theme" id="Theme_24d08"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_gxo8o")
@@ -137,6 +139,16 @@ offset_top = 256.0
 offset_right = 88.0
 offset_bottom = 296.0
 
+[node name="FPSLabel" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 274.0
+offset_right = 160.0
+offset_bottom = 336.0
+theme = SubResource("Theme_24d08")
+theme_override_font_sizes/font_size = 36
+text = "fps"
+
 [node name="Timer" type="Timer" parent="."]
 
 [connection signal="editing_toggled" from="Panel/Grid Size/gridNum Input" to="." method="_on_grid_num_input_editing_toggled"]
@@ -145,4 +157,3 @@ offset_bottom = 296.0
 [connection signal="toggled" from="Panel/Fill Cells/fillCellsCheck" to="." method="_on_fill_cells_check_toggled"]
 [connection signal="pressed" from="Panel/Generate Button" to="." method="_on_generate_button_pressed"]
 [connection signal="toggled" from="Panel/Autorun/autorun Check" to="." method="_on_autorun_check_toggled"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

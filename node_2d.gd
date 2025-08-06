@@ -12,7 +12,7 @@ var areLinesActive : bool = true
 var areCellsFilled : bool = true
 var autorunPre : bool
 var autorunPost : bool
-@onready var timer = $Timer
+#@onready var timer = $Timer
 
 
 func _ready() -> void:
@@ -21,6 +21,7 @@ func _ready() -> void:
 	_draw()
 
 func _process(delta: float) -> void:
+	$Panel/FPSLabel.text = "FPS: %d" % Engine.get_frames_per_second()
 	if autorunPost == true:
 		_ret_to_go()
 
@@ -85,6 +86,8 @@ func _ret_to_go():
 	if areCellsFilled == true:
 		_cell_fill_in()
 	queue_redraw()
+	#await(get_tree().create_timer(3.0))
+	OS.delay_msec(30)
 
 func _on_generate_button_pressed() -> void:
 	if autorunPre == true:
@@ -108,6 +111,3 @@ func _on_fill_cells_check_toggled(toggled_on: bool) -> void:
 func _on_autorun_check_toggled(toggled_on: bool) -> void:
 	autorunPre = toggled_on
 	#print(autorunPre)
-
-func _on_timer_timeout() -> void:
-	pass
