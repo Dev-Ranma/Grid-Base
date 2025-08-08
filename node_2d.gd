@@ -12,18 +12,34 @@ var areLinesActive : bool = true
 var areCellsFilled : bool = true
 var autorunPre : bool
 var autorunPost : bool
-#@onready var timer = $Timer
+var switch : bool = true
+@onready var time = $Timer
+var x1 = .5
+var x2 = .1
+var x3 = .05
+var menu
+var popup
+var speedText
 
 
 func _ready() -> void:
+	menu = $Panel/Autorun/MenuButton
+	popup = menu.get_popup()
+	popup.id_pressed.connect(_speed_menu)
+	time.wait_time = x1
+	speedText = "x1"
 	_grid_points()
 	_cell_fill_in()
 	_draw()
 
 func _process(delta: float) -> void:
 	$Panel/FPSLabel.text = "FPS: %d" % Engine.get_frames_per_second()
+	menu.text = speedText
 	if autorunPost == true:
-		_ret_to_go()
+			if switch == true:
+				_ret_to_go()
+				time.start()
+				switch = false
 
 func _draw() -> void:
 	var cellWidth : float = GridX / cellNum
@@ -40,7 +56,7 @@ func _draw() -> void:
 			draw_rect(Rect2((((cellGridIndex[i][0] - 1.0) / float(cellNum)) * 600 ), (((cellGridIndex[i][1] - 1.0)/ float(cellNum)) * 600 ), cellWidth, cellHeight), Color.BLACK, true)
 		i += 1
 	
-	draw_rect(Rect2(0.0, 0.0, GridX, GridY), Color.RED, false, 4)
+	draw_rect(Rect2(0.0, 0.0, GridX, GridY), Color.RED, false, -4)
 	
 	if areLinesActive == true:
 		for cells in (cellNum - 1):
@@ -82,16 +98,16 @@ func _cell_fill_in():
 	#print(cellGridIndex)
 
 func _ret_to_go():
+	#await _waiting()
 	_grid_points()
 	if areCellsFilled == true:
 		_cell_fill_in()
 	queue_redraw()
-	#await(get_tree().create_timer(3.0))
-	OS.delay_msec(30)
 
 func _on_generate_button_pressed() -> void:
 	if autorunPre == true:
 		autorunPost = true
+		time.wait_time
 		#print(autorunPost)
 	else:
 		autorunPost = false
@@ -111,3 +127,18 @@ func _on_fill_cells_check_toggled(toggled_on: bool) -> void:
 func _on_autorun_check_toggled(toggled_on: bool) -> void:
 	autorunPre = toggled_on
 	#print(autorunPre)
+
+func _on_timer_timeout() -> void:
+	switch = true
+
+func _speed_menu(speed):
+	match(speed):
+		0:
+			time.wait_time = x1
+			speedText = "x1"
+		1:
+			time.wait_time = x2
+			speedText = "x2"
+		2:
+			time.wait_time = x3
+			speedText = "x3"
